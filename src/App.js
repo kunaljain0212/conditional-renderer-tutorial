@@ -1,23 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import AuthenticatedUser from "./components/authenticatedUser";
+import Admin from "./components/admin";
+import User from "./components/user";
+import "./App.css";
+import ConditionalRenderer from "./hoc/conditionalRenderer";
 
 function App() {
+  const [role, setRole] = useState("admin");
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ConditionalRenderer isVisible={isLoggedIn}>
+        <AuthenticatedUser />
+      </ConditionalRenderer>
+      <ConditionalRenderer isVisible={isLoggedIn}>
+        <ConditionalRenderer isVisible={role === "admin"}>
+          <Admin />
+        </ConditionalRenderer>
+        <ConditionalRenderer isVisible={role === "user"}>
+          <User />
+        </ConditionalRenderer>
+      </ConditionalRenderer>
     </div>
   );
 }
